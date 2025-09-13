@@ -1,0 +1,11 @@
+---
+# handlers file for setup_apache_role
+- name: start {{hd_pkg}} service
+  service:
+    name: "{{hd_pkg}}"
+    state: started
+
+- name: start {{db_pkg}} service
+  service:
+    name: "{{db_pkg}}"
+    state: started

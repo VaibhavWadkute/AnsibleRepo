@@ -1,0 +1,15 @@
+---
+# tasks file for setup_apache_role
+- name: install {{hd_pkg}}
+  yum: 
+   name: "{{hd_pkg}}"
+   state: installed
+  when: ansible_os_family == "RedHat"
+  notify: start {{hd_pkg}} service
+
+- name: install {{db_pkg}}
+  apt:
+    name: "{{db_pkg}}"
+    state: intsalled
+  when: ansible_os_family == "Debian"
+  notify: start {{db_pkg}} service

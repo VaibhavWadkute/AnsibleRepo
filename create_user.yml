@@ -1,0 +1,9 @@
+---
+- name: This palybook is to create user
+  hosts: all
+  become: true
+  tasks:
+  - name: creating user raj
+    user:
+      name: raj
+      state: present

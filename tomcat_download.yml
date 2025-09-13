@@ -1,0 +1,39 @@
+---
+- name: Install Apache Tomcat on EC2
+  hosts: all
+  become: yes
+  vars:
+    tomcat_version: "9.0.82"
+    tomcat_major: "9"
+    tomcat_url: "https://archive.apache.org/dist/tomcat/tomcat-{{ tomcat_major }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    install_path: "/opt/tomcat"
+    archive_path: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+
+  tasks:
+    - name: Install Java (Amazon Linux or Ubuntu)
+      package:
+        name: java
+        state: present
+
+    - name: Create Tomcat installation directory
+      file:
+        path: "{{ install_path }}"
+        state: directory
+        mode: '0755'
+
+    - name: Download Tomcat archive
+      get_url:
+        url: "{{ tomcat_url }}"
+        dest: "{{ archive_path }}"
+        mode: '0644'
+
+    - name: Extract Tomcat archive
+      unarchive:
+        src: "{{ archive_path }}"
+        dest: "{{ install_path }}"
+        remote_src: yes
+
+    - name: Start Tomcat server
+      command: "{{ install_path }}/apache-tomcat-{{ tomcat_version }}/bin/startup.sh"
+      args:
+        chdir: "{{ install_path }}/apache-tomcat-{{ tomcat_version }}/bin"
